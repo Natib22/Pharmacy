@@ -1,0 +1,13 @@
+pharmacy Management
+1. Buy a medicine
+     - from a separate medicinesfile
+     - write patient name along with it
+2. Display medicine price list
+         -from a separate medicinesfile
+3. Search for available medicine
+4. To add medicine to the inventory(authorized user only)
+     - add medicine append
+     - search for patient
+     - delete patient record
+     - update price
+5. To exit from the system
