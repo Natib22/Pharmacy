@@ -1,0 +1,15 @@
+Amoxicillin Antibiotics 150
+Ampicillin Antibiotics 180
+Delafloxacin Antibiotics 300
+Paracetamol Anti-pain 127
+Ibuprofen Anti-pain 120
+Naproxin Anti-pain 600
+Morphine Anti-pain 150
+Potassium Vitamins 90
+Ascorbic-Acid Vitamins 100
+Thiamine Vitamins 220
+1Vitamin-D3 Vitamins 400
+Anthistamine Antitussives 300
+Decognizant Antitussives 320
+Sertraline  Antidepressants 230
+Fluoxetine Antidepressants 120

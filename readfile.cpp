@@ -1,19 +1,20 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include <string.h>
+using namespace std;
 // Example structure
 struct MyStruct
 {
     int intValue;
-    double doubleValue;
-    std::string stringValue;
+    string doubleValue;
+    string stringValue;
 };
 
 int main()
 {
     // Open a text file for reading
-    std::ifstream inputFile("data.txt");
+    ifstream inputFile("nati.txt");
 
     if (!inputFile.is_open())
     {
@@ -21,12 +22,11 @@ int main()
         return 1;
     }
 
-    // Read each line from the file
-    std::string line;
-    std::getline(inputFile, line);
+    string line;
+    getline(inputFile, line);
 
     // Create a stringstream to parse the line
-    std::istringstream iss(line);
+    istringstream iss(line);
 
     // Create a structure to store the parsed data
     MyStruct myData;
@@ -35,9 +35,9 @@ int main()
     iss >> myData.intValue >> myData.doubleValue >> myData.stringValue;
 
     // Display the data
-    std::cout << "intValue: " << myData.intValue << std::endl;
-    std::cout << "doubleValue: " << myData.doubleValue << std::endl;
-    std::cout << "stringValue: " << myData.stringValue << std::endl;
+    cout << "intValue: " << myData.intValue << endl;
+    cout << "doubleValue: " << myData.doubleValue << endl;
+    cout << "stringValue: " << myData.stringValue << endl;
 
     // Close the file
     inputFile.close();
