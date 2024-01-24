@@ -13,6 +13,7 @@ struct Medicine
 };
 void display();
 void buyMedicine();
+void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string name);
 
 int main()
 {
@@ -77,11 +78,47 @@ void buyMedicine()
             cout << endl;
         } while (choice == 1);
 
-        // buyer << "\n";
+        buyer.close();
+        cout << "here is ur receipt" << endl;
+        displayReceipt(whichMedicine, quantities, name);
     }
     else
     {
         cout << "Error opening file";
         cout << endl;
     }
+}
+
+void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string name)
+{
+
+    Medicine medicine;
+    string line;
+    int totalPrice = 0;
+
+    cout << "\t-------------------------------------------------------------------------\n";
+    cout << "\t                       Pharmacy Receipt                                  \n";
+    cout << "\t-------------------------------------------------------------------------\n";
+    cout << "\tName: " << name << "                                 Date:  date\n";
+    cout << "\t-------------------------------------------------------------------------\n";
+    cout << "\tNo.\tMedicine name\tprice\tquantity\ttotal price\n";
+    for (int i = 0, j = 0; i < whichMedicine.size(); i++)
+    {
+        ifstream inputFile("Medicines.txt");
+
+        while (j < whichMedicine[i] && getline(inputFile, line))
+        {
+            j++;
+        }
+        istringstream iss(line);
+        iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
+        cout << "\t" << i + 1 << ".\t" << medicine.medicineName << "\t" << medicine.price << "\t" << quantities[i] << "\t" << quantities[i] * medicine.price << endl;
+        totalPrice += quantities[i] * medicine.price;
+        j = 0;
+        inputFile.close();
+    }
+
+    cout << endl;
+    cout << "\t\t\t\t\tGrand total: " << totalPrice << endl;
+    cout << "\t-------------------------------------------------------------------------\n";
 }
