@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sstream>
 #include <vector>
+#include <ctime>
 using namespace std;
 
 struct Medicine
@@ -95,27 +96,40 @@ void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string na
     Medicine medicine;
     string line;
     int totalPrice = 0;
+    // time_t now = time(0);
+    // char *dt = ctime(&now);
+    time_t now = time(0);
+    struct tm *timeinfo = localtime(&now);
+
+    char dt[20];
+    strftime(dt, sizeof(dt), "%Y-%m-%d %H:%M:%S", timeinfo);
 
     cout << "\t-------------------------------------------------------------------------\n";
     cout << "\t                       Pharmacy Receipt                                  \n";
     cout << "\t-------------------------------------------------------------------------\n";
-    cout << "\tName: " << name << "                                 Date:  date\n";
+    cout << "\tName: " << name << "                                 Date: " << dt << endl;
     cout << "\t-------------------------------------------------------------------------\n";
     cout << "\tNo.\tMedicine name\tprice\tquantity\ttotal price\n";
     for (int i = 0, j = 0; i < whichMedicine.size(); i++)
     {
         ifstream inputFile("Medicines.txt");
-
-        while (j < whichMedicine[i] && getline(inputFile, line))
+        if (inputFile.is_open())
         {
-            j++;
+            while (j < whichMedicine[i] && getline(inputFile, line))
+            {
+                j++;
+            }
+            istringstream iss(line);
+            iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
+            cout << "\t" << i + 1 << ".\t" << medicine.medicineName << "\t" << medicine.price << "\t" << quantities[i] << "\t\t" << quantities[i] * medicine.price << endl;
+            totalPrice += quantities[i] * medicine.price;
+            j = 0;
+            inputFile.close();
         }
-        istringstream iss(line);
-        iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
-        cout << "\t" << i + 1 << ".\t" << medicine.medicineName << "\t" << medicine.price << "\t" << quantities[i] << "\t" << quantities[i] * medicine.price << endl;
-        totalPrice += quantities[i] * medicine.price;
-        j = 0;
-        inputFile.close();
+        else
+        {
+            cout << " error opening the file" << endl;
+        }
     }
 
     cout << endl;
