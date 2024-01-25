@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <ctime>
+#include <iomanip>
 using namespace std;
 
 struct Medicine
@@ -15,10 +16,39 @@ struct Medicine
 void display();
 void buyMedicine();
 void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string name);
+void searchMedicine();
 
 int main()
 {
-    buyMedicine();
+    int choice;
+    cout << right << setw(40) << "Pharmacy Management System\n";
+    cout << "-------------------------------------------------" << endl;
+    cout << "-------------------------------------------------" << endl;
+    cout << setw(36) << "Welcome to E-Pharmacy\n";
+    cout << "Menu\n";
+    cout << "choose from the given options:\n";
+    cout << "1. Buy a medicine\n";
+    cout << "2. Display medicine price list\n";
+    cout << "3. Search for available medicine\n";
+    cout << "4. To add medicine to the inventory(authorized user only)\n";
+    cout << "5. To exit from the system\n\n";
+    cout << "Enter your choice from the menu: ";
+    cin >> choice;
+    cout << endl;
+    switch (choice)
+    {
+    case 1:
+        buyMedicine();
+        break;
+    case 2:
+        display();
+        break;
+    case 3:
+        searchMedicine();
+        break;
+    default:
+        break;
+    }
     return 0;
 }
 
@@ -135,4 +165,47 @@ void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string na
     cout << endl;
     cout << "\t\t\t\t\tGrand total: " << totalPrice << endl;
     cout << "\t-------------------------------------------------------------------------\n";
+}
+
+void searchMedicine()
+{
+    string searchMedicine;
+    string line;
+    int length;
+    bool flag = false;
+    ifstream inputFile("medicines.txt");
+
+    if (!inputFile.is_open())
+    {
+        cerr << "Error opening file." << endl;
+    }
+
+    cout << "Enter the name of the name of the medicine you want to search from the store " << endl;
+    cin >> searchMedicine;
+    length = searchMedicine.size();
+
+    searchMedicine[0] = toupper(searchMedicine[0]); // to convert user input string to first letter capital and the rest to lower
+    for (int i = 1; i < length; i++)
+        searchMedicine[i] = tolower(searchMedicine[i]);
+
+    while (getline(inputFile, line))
+    {
+        istringstream iss(line);
+        Medicine medicine;
+        iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
+
+        if (medicine.medicineName == searchMedicine)
+        {
+            flag = true;
+            cout << "Medicine found:" << endl;
+            cout << "Name: " << medicine.medicineName << endl;
+            cout << "Category: " << medicine.medicineType << endl;
+            cout << "Price: " << medicine.price << endl;
+        }
+    }
+    if (flag == false)
+    {
+        cout << "Medicine not found." << endl;
+    }
+    inputFile.close();
 }
