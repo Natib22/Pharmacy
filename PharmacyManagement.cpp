@@ -46,6 +46,13 @@ int main()
     case 3:
         searchMedicine();
         break;
+    case 4:
+        // authorized section
+        break;
+    case 5:
+    exit_menu:
+        exit(0);
+        break;
     default:
         break;
     }
