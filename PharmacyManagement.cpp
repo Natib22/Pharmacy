@@ -92,7 +92,9 @@ void buyMedicine()
     if (buyer.is_open())
     {
         cout << "Enter your fullname: ";
+        cin.ignore();
         getline(cin, name);
+
         cout << endl;
 
         display();
@@ -179,7 +181,9 @@ void searchMedicine()
     string searchMedicine;
     string line;
     int length;
+
     bool flag = false;
+    int choice;
     ifstream inputFile("medicines.txt");
 
     if (!inputFile.is_open())
@@ -199,20 +203,42 @@ void searchMedicine()
     {
         istringstream iss(line);
         Medicine medicine;
+
         iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
 
         if (medicine.medicineName == searchMedicine)
         {
             flag = true;
+            cout << "---------------------------------------" << endl;
+            cout << "---------------------------------------" << endl;
             cout << "Medicine found:" << endl;
             cout << "Name: " << medicine.medicineName << endl;
             cout << "Category: " << medicine.medicineType << endl;
             cout << "Price: " << medicine.price << endl;
+            cout << "---------------------------------------" << endl;
+            cout << "---------------------------------------" << endl;
+            break;
+        }
+    }
+    inputFile.close();
+    if (flag == true)
+    {
+        cout << "If you want to buy " << searchMedicine << " from the pharmacy" << endl;
+        cout << "(press 1 for Yes) or any other key to exit the system" << endl;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            cout << searchMedicine << " is found in the medicine list below" << endl;
+            buyMedicine();
+            break;
+
+        default:
+            return;
         }
     }
     if (flag == false)
     {
         cout << "Medicine not found." << endl;
     }
-    inputFile.close();
 }
