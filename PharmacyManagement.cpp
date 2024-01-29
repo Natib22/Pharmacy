@@ -32,6 +32,8 @@ int main()
     cout << "3. Search for available medicine\n";
     cout << "4. To add medicine to the inventory(authorized user only)\n";
     cout << "5. To exit from the system\n\n";
+    cout << "-------------------------------------------------" << endl;
+    cout << "-------------------------------------------------" << endl;
     cout << "Enter your choice from the menu: ";
     cin >> choice;
     cout << endl;
@@ -69,11 +71,18 @@ void display()
         cout << "Error opening file." << endl;
     }
     int i = 1;
+    cout << "---------------------------------------------------------------------------------------------------------\n";
+    cout << "  Drugs Name"
+         << "   \t\tDrug Type"
+        
+         << "\t\t\tDRUGS PRICE(Birr)" << endl;
+    cout << "---------------------------------------------------------------------------------------------------------\n";
     while (getline(inputFile, line))
     {
         istringstream iss(line);
         iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
-        cout << i << ". " << medicine.medicineName << "\t" << medicine.medicineType << "\t" << medicine.price << endl;
+        cout << i << "  "
+             << "." << medicine.medicineName << "\t\t" << medicine.medicineType << "\t\t\t" << medicine.price << endl;
         i++;
     }
 
