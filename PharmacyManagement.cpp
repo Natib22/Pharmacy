@@ -18,6 +18,8 @@ void buyMedicine();
 void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string name);
 void searchMedicine();
 void addMedicine();
+void updatePrice();
+void deleteMedicine();
 
 int main()
 {
@@ -51,7 +53,28 @@ int main()
         break;
     case 4:
         // authorized section
-        addMedicine();
+        cout << "1. Add new medicine to the store" << endl;
+        cout << "2. Update a medicines price" << endl;
+        cout << "3. Delete a medicine from the store" << endl;
+        cout << "Enter which of the following operation you want to the store: ";
+        cin >> choice;
+        cout << endl;
+        switch (choice)
+        {
+        case 1:
+            addMedicine();
+            break;
+        case 2:
+            updatePrice();
+            break;
+        case 3:
+            deleteMedicine();
+            break;
+
+        default:
+            break;
+        }
+
         break;
     case 5:
     exit_menu:
@@ -280,4 +303,108 @@ void addMedicine()
         myfile << "\n";
     }
     myfile.close();
+}
+
+void updatePrice()
+{
+    int choice;
+    ifstream inFile("Medicines.txt");
+    ofstream outFile("temp.txt");
+    string itemToUpdate;
+    string line;
+
+    int newPrice; // Set the new price
+    display();
+    cout << "Enter the correct name of the drug you want to update the price from the store: ";
+    cin >> itemToUpdate;
+    itemToUpdate[0] = toupper(itemToUpdate[0]); // to convert user input string to first letter capital and the rest to lower
+    for (int i = 1; i < itemToUpdate.size(); i++)
+        itemToUpdate[i] = tolower(itemToUpdate[i]);
+    cout << " to what price in Birr do you want to update " << itemToUpdate << ": ";
+    cin >> newPrice;
+    cout << endl;
+
+    if (inFile.is_open() && outFile.is_open())
+    {
+
+        while (getline(inFile, line))
+        {
+            istringstream iss(line);
+            Medicine medicine;
+
+            iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
+            if (medicine.medicineName == itemToUpdate)
+            {
+                medicine.price = newPrice;
+            }
+            outFile << medicine.medicineName << " " << medicine.medicineType << " " << medicine.price << endl;
+        }
+        // Close the files
+        inFile.close();
+        outFile.close();
+
+        // Remove the original file
+        remove("Medicines.txt");
+        // Rename the temporary file to the original filename
+        rename("temp.txt", "Medicines.txt");
+        cout << "---------------------------------------" << endl;
+        cout << "Price updated successfully." << endl;
+        cout << "---------------------------------------" << endl;
+    }
+    else
+    {
+        cout << "Error opening the files" << endl;
+    }
+}
+void deleteMedicine()
+{
+    int choice;
+    ifstream inFile("Medicines.txt");
+    ofstream outFile("temp.txt");
+    string itemToDelete;
+    string line;
+
+    display();
+    cout << "Enter the correct name of the drug you want to delete from the store: ";
+    cin >> itemToDelete;
+    itemToDelete[0] = toupper(itemToDelete[0]); // to convert user input string to first letter capital and the rest to lower
+    for (int i = 1; i < itemToDelete.size(); i++)
+        itemToDelete[i] = tolower(itemToDelete[i]);
+    cout << endl;
+
+    if (inFile.is_open() && outFile.is_open())
+    {
+
+        while (getline(inFile, line))
+        {
+            istringstream iss(line);
+            Medicine medicine;
+
+            iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
+            if (medicine.medicineName == itemToDelete)
+            {
+                // Skip this medicine (effectively deleting it)
+                continue;
+            }
+            outFile << medicine.medicineName << " " << medicine.medicineType << " " << medicine.price << endl;
+        }
+
+        // Close the files
+        inFile.close();
+        outFile.close();
+
+        // Remove the original file
+        remove("Medicines.txt");
+
+        // Rename the temporary file to the original filename
+        rename("temp.txt", "Medicines.txt");
+
+        cout << "---------------------------------------" << endl;
+        cout << "Medicine deleted successfully." << endl;
+        cout << "---------------------------------------" << endl;
+    }
+    else
+    {
+        cout << "Error opening the files" << endl;
+    }
 }
