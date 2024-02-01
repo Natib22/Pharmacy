@@ -17,6 +17,7 @@ void display();
 void buyMedicine();
 void displayReceipt(vector<int> whichMedicine, vector<int> quantities, string name);
 void searchMedicine();
+void addMedicine();
 
 int main()
 {
@@ -50,6 +51,7 @@ int main()
         break;
     case 4:
         // authorized section
+        addMedicine();
         break;
     case 5:
     exit_menu:
@@ -74,7 +76,7 @@ void display()
     cout << "---------------------------------------------------------------------------------------------------------\n";
     cout << "  Drugs Name"
          << "   \t\tDrug Type"
-        
+
          << "\t\t\tDRUGS PRICE(Birr)" << endl;
     cout << "---------------------------------------------------------------------------------------------------------\n";
     while (getline(inputFile, line))
@@ -250,4 +252,32 @@ void searchMedicine()
     {
         cout << "Medicine not found." << endl;
     }
+}
+
+void addMedicine()
+{
+    Medicine medicine;
+    fstream myfile;
+    myfile.open("Medicines.txt", ios::out | ios::app);
+    if (myfile.is_open())
+    {
+        cout << "Enter the name of the medicine you want to add to the store\n";
+        cin >> medicine.medicineName;
+        cout << endl;
+        medicine.medicineName[0] = toupper(medicine.medicineName[0]); // to convert user input string to first letter capital and the rest to lower
+        for (int i = 1; i < medicine.medicineName.size(); i++)
+            medicine.medicineName[i] = tolower(medicine.medicineName[i]);
+        myfile << medicine.medicineName << " ";
+
+        cout << "Enter the drug type of " << medicine.medicineName << endl;
+        cin >> medicine.medicineType;
+        myfile << medicine.medicineType << " ";
+        cout << endl;
+
+        cout << " Enter " << medicine.medicineName << " current price you want the store to sell" << endl;
+        cin >> medicine.price;
+        myfile << medicine.price;
+        myfile << "\n";
+    }
+    myfile.close();
 }
