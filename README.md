@@ -12,10 +12,9 @@ The Pharmacy Management project is a system that facilitates the management of a
    - Enables users to search for the availability of specific medicines.
 
 4. **Inventory Management (Authorized Users Only):**
-   - Authorized users can perform actions such as adding a new medicine, appending records.
-   - Search for a patient in the system.
-   - Delete patient records.
-   - Update the price of medicines.
+    - Add new medicine to the store
+    - Update a medicines price
+    - Delete a medicine from the store
 
 5. **Exit:**
    - Provides an option to exit the system.
