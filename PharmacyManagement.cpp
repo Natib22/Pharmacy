@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 #include <iomanip>
+#include <windows.h>
 using namespace std;
 
 struct Medicine
@@ -21,68 +22,134 @@ void addMedicine();
 void updatePrice();
 void deleteMedicine();
 
+// Function to check if a file exists
+bool fileExists(const string &filename)
+{
+    ifstream file(filename);
+    return file.good();
+}
+
+// Function to get the password from the user
+string getPassword()
+{
+    string password;
+    cout << "Enter password: ";
+    cin >> password;
+    return password;
+}
+
+// Function to save the password to a file
+void savePassword(const string &password)
+{
+    ofstream file("password.bin", ios::binary);
+    file << password;
+}
+
+// Function to load the password from the file
+string loadPassword()
+{
+    ifstream file("password.bin", ios::binary);
+    string password;
+    file >> password;
+    return password;
+}
+void clearScreen()
+{
+#ifdef _WIN32
+    system("cls"); // Windows
+#else
+    system("clear"); // UNIX/Linux
+#endif
+}
+
 int main()
 {
     int choice;
-    cout << right << setw(40) << "Pharmacy Management System\n";
-    cout << "-------------------------------------------------" << endl;
-    cout << "-------------------------------------------------" << endl;
-    cout << setw(36) << "Welcome to E-Pharmacy\n";
-    cout << "Menu\n";
-    cout << "choose from the given options:\n";
-    cout << "1. Buy a medicine\n";
-    cout << "2. Display medicine price list\n";
-    cout << "3. Search for available medicine\n";
-    cout << "4. To add medicine to the inventory(authorized user only)\n";
-    cout << "5. To exit from the system\n\n";
-    cout << "-------------------------------------------------" << endl;
-    cout << "-------------------------------------------------" << endl;
-    cout << "Enter your choice from the menu: ";
-    cin >> choice;
-    cout << endl;
-    switch (choice)
+    while (true)
     {
-    case 1:
-        buyMedicine();
-        break;
-    case 2:
-        display();
-        break;
-    case 3:
-        searchMedicine();
-        break;
-    case 4:
-        // authorized section
-        cout << "1. Add new medicine to the store" << endl;
-        cout << "2. Update a medicines price" << endl;
-        cout << "3. Delete a medicine from the store" << endl;
-        cout << "Enter which of the following operation you want to the store: ";
+        clearScreen();
+        cout << right << setw(40) << "Pharmacy Management System\n";
+        cout << "-------------------------------------------------" << endl;
+        cout << "-------------------------------------------------" << endl;
+        cout << setw(36) << "Welcome to E-Pharmacy\n";
+        cout << "Menu\n";
+        cout << "choose from the given options:\n";
+        cout << "1. Buy a medicine\n";
+        cout << "2. Display medicine price list\n";
+        cout << "3. Search for available medicine\n";
+        cout << "4. To add medicine to the inventory(authorized user only)\n";
+        cout << "5. To exit from the system\n\n";
+        cout << "-------------------------------------------------" << endl;
+        cout << "-------------------------------------------------" << endl;
+        cout << "Enter your choice from the menu: ";
         cin >> choice;
         cout << endl;
         switch (choice)
         {
         case 1:
-            addMedicine();
+            buyMedicine();
             break;
         case 2:
-            updatePrice();
+            display();
             break;
         case 3:
-            deleteMedicine();
+            searchMedicine();
             break;
+        case 4:
+            if (fileExists("password.bin"))
+            {
+                // If the password file exists, prompt the user for password
+                string savedPassword = loadPassword();
+                string enteredPassword = getPassword();
+                if (enteredPassword == savedPassword)
+                {
+                    cout << "Access granted!" << endl;
+                    // Authorized section
+                    int choice;
+                    cout << "1. Add new medicine to the store" << endl;
+                    cout << "2. Update a medicine's price" << endl;
+                    cout << "3. Delete a medicine from the store" << endl;
+                    cout << "Enter which of the following operation you want to the store: ";
+                    cin >> choice;
+                    cout << endl;
+                    switch (choice)
+                    {
+                    case 1:
+                        addMedicine();
+                        break;
+                    case 2:
+                        updatePrice();
+                        break;
+                    case 3:
+                        deleteMedicine();
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                else
+                {
+                    cout << "Incorrect password. Access denied!" << endl;
+                }
+            }
+            else
+            {
+                // If the password file doesn't exist, prompt the user to set a password
+                cout << "No password set. Setting up a password for access." << endl;
+                string newPassword = getPassword();
+                savePassword(newPassword);
+                cout << "Password set successfully!" << endl;
+            }
 
+            break;
+        case 5:
+            goto exit_menu;
+            break;
         default:
             break;
         }
-
-        break;
-    case 5:
-    exit_menu:
-        exit(0);
-        break;
-    default:
-        break;
     }
+exit_menu:
     return 0;
 }
 
