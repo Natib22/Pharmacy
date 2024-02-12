@@ -5,6 +5,7 @@
 #include <vector>
 #include <ctime>
 #include <iomanip>
+#include <windows.h>
 using namespace std;
 
 struct Medicine
@@ -21,9 +22,50 @@ void addMedicine();
 void updatePrice();
 void deleteMedicine();
 
+// Function to check if a file exists
+bool fileExists(const string &filename)
+{
+    ifstream file(filename);
+    return file.good();
+}
+
+// Function to get the password from the user
+string getPassword()
+{
+    string password;
+    cout << "Enter password: ";
+    cin >> password;
+    return password;
+}
+
+// Function to save the password to a file
+void savePassword(const string &password)
+{
+    ofstream file("password.bin", ios::binary);
+    file << password;
+}
+
+// Function to load the password from the file
+string loadPassword()
+{
+    ifstream file("password.bin", ios::binary);
+    string password;
+    file >> password;
+    return password;
+}
+void clearScreen()
+{
+#ifdef _WIN32
+    system("cls"); // Windows
+#else
+    system("clear"); // UNIX/Linux
+#endif
+}
+
 int main()
 {
     int choice;
+
     cout << right << setw(40) << "Pharmacy Management System\n";
     cout << "-------------------------------------------------" << endl;
     cout << "-------------------------------------------------" << endl;
@@ -46,36 +88,60 @@ int main()
         buyMedicine();
         break;
     case 2:
+
         display();
         break;
     case 3:
         searchMedicine();
         break;
     case 4:
-        // authorized section
-        cout << "1. Add new medicine to the store" << endl;
-        cout << "2. Update a medicines price" << endl;
-        cout << "3. Delete a medicine from the store" << endl;
-        cout << "Enter which of the following operation you want to the store: ";
-        cin >> choice;
-        cout << endl;
-        switch (choice)
+        if (fileExists("password.bin"))
         {
-        case 1:
-            addMedicine();
-            break;
-        case 2:
-            updatePrice();
-            break;
-        case 3:
-            deleteMedicine();
-            break;
-
-        default:
-            break;
+            // If the password file exists, prompt the user for password
+            string savedPassword = loadPassword();
+            string enteredPassword = getPassword();
+            if (enteredPassword == savedPassword)
+            {
+                cout << "Access granted!" << endl;
+                // Authorized section
+                int choice;
+                cout << "1. Add new medicine to the store" << endl;
+                cout << "2. Update a medicine's price" << endl;
+                cout << "3. Delete a medicine from the store" << endl;
+                cout << "Enter which of the following operation you want to the store: ";
+                cin >> choice;
+                cout << endl;
+                switch (choice)
+                {
+                case 1:
+                    addMedicine();
+                    break;
+                case 2:
+                    updatePrice();
+                    break;
+                case 3:
+                    deleteMedicine();
+                    break;
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                cout << "Incorrect password. Access denied!" << endl;
+            }
+        }
+        else
+        {
+            // If the password file doesn't exist, prompt the user to set a password
+            cout << "No password set. Setting up a password for access." << endl;
+            string newPassword = getPassword();
+            savePassword(newPassword);
+            cout << "Password set successfully!" << endl;
         }
 
         break;
+
     case 5:
     exit_menu:
         exit(0);
@@ -83,6 +149,7 @@ int main()
     default:
         break;
     }
+
     return 0;
 }
 
@@ -97,17 +164,17 @@ void display()
     }
     int i = 1;
     cout << "---------------------------------------------------------------------------------------------------------\n";
-    cout << "  Drugs Name"
+    cout << "   Drugs Name"
          << "   \t\tDrug Type"
 
-         << "\t\t\tDRUGS PRICE(Birr)" << endl;
+         << "\t\tDRUGS PRICE(Birr)" << endl;
     cout << "---------------------------------------------------------------------------------------------------------\n";
     while (getline(inputFile, line))
     {
         istringstream iss(line);
         iss >> medicine.medicineName >> medicine.medicineType >> medicine.price;
         cout << i << "  "
-             << "." << medicine.medicineName << "\t\t" << medicine.medicineType << "\t\t\t" << medicine.price << endl;
+             << medicine.medicineName << "\t\t" << medicine.medicineType << "\t\t" << medicine.price << endl;
         i++;
     }
 
