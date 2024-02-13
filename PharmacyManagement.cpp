@@ -6,6 +6,8 @@
 #include <ctime>
 #include <iomanip>
 #include <windows.h>
+#include <thread> // for std::this_thread::sleep_for
+#include <chrono> // for std::chrono::seconds
 using namespace std;
 
 struct Medicine
@@ -53,18 +55,11 @@ string loadPassword()
     file >> password;
     return password;
 }
-void clearScreen()
-{
-#ifdef _WIN32
-    system("cls"); // Windows
-#else
-    system("clear"); // UNIX/Linux
-#endif
-}
 
 int main()
 {
     int choice;
+main_menu:
 
     cout << right << setw(40) << "Pharmacy Management System\n";
     cout << "-------------------------------------------------" << endl;
@@ -86,13 +81,20 @@ int main()
     {
     case 1:
         buyMedicine();
+        // this_thread::sleep_for(chrono::seconds(5));
+        // goto main_menu;
         break;
     case 2:
 
         display();
+        // Wait for 3 seconds
+        this_thread::sleep_for(chrono::seconds(5));
+        goto main_menu;
         break;
     case 3:
         searchMedicine();
+        // Wait for 3 seconds
+
         break;
     case 4:
         if (fileExists("password.bin"))

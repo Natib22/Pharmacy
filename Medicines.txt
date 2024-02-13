@@ -6,10 +6,10 @@ Ibuprofen Anti-pain 120
 Naproxin Anti-pain 500
 Morphine Anti-pain 150
 Potassium Vitamins 90
-Lexapro Vitamins 100
+Lexapro Vitamins 300
 Thiamine Vitamins 220
 Vitamin-D3 Vitamins 400
-Calcium Antitussives 300
+Calcium Antitussives 200
 Naloxone Antitussives 320
 Sertraline Antidepressants 230
 Fluoxetine Antidepressants 120
